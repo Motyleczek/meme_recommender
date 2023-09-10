@@ -1,6 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 import os
+import csv
 
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
@@ -27,6 +28,24 @@ class SingletonMeta(type):
             cls._instances[cls] = instance
         return cls._instances[cls]
 
+def createMemeTable(db):
+
+    class MemeTable(db.Model):
+
+        __tablename__ = 'MemeTable'
+        key = db.Column(db.Integer, primary_key=True, autoincrement=True)
+        title = db.Column(db.String)
+        thumbnail = db.Column(db.String)
+        height = db.Column(db.Integer)
+        width = db.Column(db.Integer)
+        time = db.Column(db.Integer)
+        author = db.Column(db.String)
+        id = db.Column(db.String)
+        ups = db.Column(db.Integer)
+        downs = db.Column(db.Integer)
+        media = db.Column(db.String)
+
+    return MemeTable
 
 # here we are ensuring that the values in .env are imported into Website, nice
 class Website(metaclass=SingletonMeta):
@@ -38,25 +57,36 @@ class Website(metaclass=SingletonMeta):
 
         self.db = SQLAlchemy(self.app)
 
+        # TODO: see 
+
         # register all models here
-        # self.TestTable = createTestTable(self.db)
-        # self.Clients = create_clients(self.db)
-        # self.Products = create_products(self.db)
-        # self.Prices = create_prices(self.db)
-        # self.PriceQuotations = create_price_quotations(self.db)
-        # self.SalesProposals = create_sales_proposals(self.db)
-        # self.Sales = create_sales(self.db)
-        # self.Reviews = create_reviews(self.db)
-        # self.Suppliers = create_suppliers(self.db)
-        # self.SupplierOffers = create_supplier_offers(self.db)
-        # self.Stock = create_stock(self.db)
-        # self.UnitConversion = create_unit_conversion(self.db)
-        # self.Status = create_status(self.db)
-        # self.Unit = create_unit(self.db)
+        self.MemeTable = createMemeTable(self.db)
 
         with self.app.app_context():
             self.db.create_all()
-            #self.set_initial_values()
+            self.set_initial_values()
             print('Database schema has been synchronized')
 
-    
+    def set_initial_values(self):
+        with open("meme_recommender/dataset/db.csv", encoding='utf8') as file:
+            data = csv.reader(file)
+            next(data)
+
+
+            for row in data:
+                key, title, thumbnail, height, width, time, author, meme_id, ups, downs, media = row
+                new_meme = self.MemeTable(
+                    # key=key,
+                    title=title,
+                    thumbnail=thumbnail,
+                    height=height,
+                    width=width,
+                    time=time,
+                    author=author,
+                    id=meme_id,
+                    ups=ups,
+                    downs=downs,
+                    media=media        
+                )
+                self.db.session.add(new_meme)
+            self.db.session.commit()

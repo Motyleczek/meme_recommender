@@ -1,18 +1,24 @@
 {% extends 'base.html' %}
 
 {% block head %}
-
+<title>Home Page </title>
 {% endblock %}
 
 {% block content %}
 <div class="content", style="text-align:center">
   <h1>Welcome traveler</h1>
-  
-  
+    
   <br>
   <img src="./static/fire_welcome.jpeg"
      width="600" 
      height="300"><br>
   </p>
+
+  <h1>Link:</h1>
+    <h2>Details:</h2>
+    <p>Key: {{data[0][0]}}</p>
+    <p>Title: {{data[0][1]}}</p>
+    <p>Thumbnail: {{data[0][2]}}</p>
+    <img src="<?php echo $data[0][2]; ?>" />
   
 {% endblock %}

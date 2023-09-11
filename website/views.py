@@ -1,10 +1,36 @@
 from flask import Blueprint, render_template, request, flash, jsonify
- 
+from config import config
+from . import Website
+import random
+import psycopg2
+
 views = Blueprint('views', __name__)
 
-@views.route('/')
+@views.route('/', methods=["GET", "POST"])
 def index():
-    return render_template('index.html')
+    conn = None
+    data = None
+    try:
+        params = config()
+        n = random.randint(1, 3000)
+        conn = psycopg2.connect(**params)
+
+        cur = conn.cursor()
+
+        cur.execute('''SELECT * FROM public."MeteTable" ORDER BY key ASC''')
+
+        data = cur.fetchall()
+        print(data)
+
+    except(Exception, psycopg2.Error) as error:
+        print(error)
+
+    finally:
+        if conn is not None:
+            cur.close()
+            conn.close()
+
+    return render_template('index.html', data=data)
 
 @views.route('/MemeAnalyzer')
 def meme_analyzer():

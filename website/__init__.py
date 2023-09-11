@@ -57,8 +57,6 @@ class Website(metaclass=SingletonMeta):
 
         self.db = SQLAlchemy(self.app)
 
-        # TODO: see 
-
         # register all models here
         self.MemeTable = createMemeTable(self.db)
 
@@ -71,7 +69,6 @@ class Website(metaclass=SingletonMeta):
         with open("meme_recommender/dataset/db.csv", encoding='utf8') as file:
             data = csv.reader(file)
             next(data)
-
 
             for row in data:
                 key, title, thumbnail, height, width, time, author, meme_id, ups, downs, media = row

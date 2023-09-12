@@ -126,7 +126,7 @@ def meme_explorer():
 def save_meme_in_database(file, title, author, post_url, img_path):
     image_width = 100
     image_height = 100
-    time = datetime.datetime.now(pytz.UTC)
+    time = int(datetime.datetime.now(pytz.UTC))
     generated_id = generate_id()
     ups = random.randint(0,10000)
     downs = random.randint(0,10000)

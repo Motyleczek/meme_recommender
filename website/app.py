@@ -6,6 +6,7 @@ import base64
 from .config import config
 import random
 import psycopg2
+from reddit_api_functions.post import post
 
 app = Flask(__name__)
 
@@ -45,6 +46,8 @@ def meme_analyzer():
             return redirect(request.url)
 
         file = request.files['file']
+
+        
 
         if file and allowed_file(file.filename):
             title = request.form['title']

@@ -1,5 +1,7 @@
 from flask import Blueprint, render_template, request, flash, jsonify
 from .config import config
+from ..reddit_api_functions import *
+from ..reddit_api_functions.post import post
 from . import Website
 import os
 print(os.getcwd())
@@ -7,6 +9,7 @@ from ..etl_module.app import meme_prediction
 import keras
 import random
 import psycopg2
+
 
 views = Blueprint('views', __name__)
 
@@ -48,11 +51,15 @@ def meme_analyzer():
         # request.files["datafile"] --> this is as a FileStorage obj
         img_path = "meme_recommender/website/static/input_img.jpg"
         request.files["file"].save(img_path)
-        model_A = keras.models.load_model("meme_recommender/model_A.keras")
-        model_C = keras.models.load_model("meme_recommender/model_C.keras")
-        prediction = meme_prediction(model_A, model_C, img_path)
-        with open("meme_recommender/website/static/wynik.txt", "wt") as file:
-            file.write(str(prediction))
+
+        post_url = post(img_path, request.form["title"])
+        print(post_url)
+        # model_A = keras.models.load_model("meme_recommender/model_A.keras")
+        # model_C = keras.models.load_model("meme_recommender/model_C.keras")
+        # prediction = meme_prediction(model_A, model_C, img_path)
+        # with open("meme_recommender/website/static/wynik.txt", "wt") as file:
+        #     file.write(str(prediction))
+
     return render_template('meme_analyzer.html')
 
 @views.route('/MemeExplorer')

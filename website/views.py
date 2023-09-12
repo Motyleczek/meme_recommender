@@ -121,6 +121,7 @@ def meme_explorer():
     
     return render_template('meme_explorer.html')
 
+
 def save_meme_in_database(file, title, author, post_url, img_path):
     image_data = file.read()
     image_width, image_height = get_image_dimensions(image_data)

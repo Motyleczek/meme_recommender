@@ -1,3 +1,6 @@
+import imghdr
+import struct
+
 from flask import Blueprint, render_template, request, flash, jsonify
 from .config import config
 from ..reddit_api_functions import *
@@ -9,8 +12,6 @@ from ..etl_module.app import meme_prediction
 import keras
 import random
 import psycopg2
-from PIL import Image
-import io
 import datetime
 import pytz
 import string
@@ -151,9 +152,15 @@ def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 def get_image_dimensions(file):
-    img = Image.open(io.BytesIO(file.stream.read()))
-    width, height = img.size
+    image_data = file.read()
+    image_format = imghdr.what(None, h=image_data)
+
+    if image_format == 'jpeg' or image_format == 'jpg':
+        width, height = struct.unpack('>HH', image_data[162:166])
+    elif image_format == 'png':
+        width, height = struct.unpack('>LL', image_data[16:24])
     return width, height
+
 
 def generate_id():
     characters = string.ascii_letters + string.digits

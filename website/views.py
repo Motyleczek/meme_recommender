@@ -16,7 +16,7 @@ def index():
 
         cur = conn.cursor()
 
-        cur.execute('''SELECT * FROM public."MeteTable" ORDER BY key ASC''')
+        cur.execute('''SELECT * FROM public."MemeTable" ORDER BY key ASC''')
 
         data = cur.fetchall()
         print(data)

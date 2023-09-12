@@ -1,6 +1,5 @@
 from flask import Blueprint, render_template, request, flash, jsonify
-from config import config
-from . import Website
+from .config import config
 import random
 import psycopg2
 

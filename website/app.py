@@ -3,7 +3,7 @@ import imghdr
 from PIL import Image
 import io
 import base64
-from .config import config
+from config import config
 import random
 import psycopg2
 

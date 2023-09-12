@@ -1,0 +1,1 @@
+{'sentiment': 'positive', 'humour': 'funny', 'sarcasm': 'general', 'offensive': 'not_offensive', 'motivational': 'not_motivational'}

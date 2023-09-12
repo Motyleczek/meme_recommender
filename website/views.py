@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request, flash, jsonify
-from config import config
+from .config import config
 from . import Website
 import random
 import psycopg2
@@ -17,7 +17,7 @@ def index():
 
         cur = conn.cursor()
 
-        cur.execute('''SELECT * FROM public."MeteTable" ORDER BY key ASC''')
+        cur.execute('''SELECT * FROM public."MemeTable" ORDER BY key ASC''')
 
         data = cur.fetchall()
         print(data)

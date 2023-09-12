@@ -62,22 +62,48 @@ def meme_analyzer():
 
     return render_template('meme_analyzer.html')
 
-@views.route('/MemeExplorer')
+@views.route('/MemeExplorer', methods=["GET", "POST"])
 def meme_explorer():
 
-    # humour = request.form.get('humour')
-    # sarcasm = request.form.get('sarcasm')
-    # offence = request.form.get('offence')
-    # motivation = request.form.get('motivation')
+    if request.method == "POST": 
+        conn = None
+        data = None
+        try:
+            params = config()
+            conn = psycopg2.connect(**params)
 
-    # query = f'SELECT * FROM memes WHERE humour >= {humour} \
-    # AND sarcasm >= {sarcasm} \
-    # AND offence >= {offence} \
-    # AND motivation >= {motivation}'
+            print('Connected succesfully')
 
-    # cursor.execute(query)
+            cur = conn.cursor()
 
-    # meme_data = cursor.fetchone()
+            humour = request.form.get('humour')
+            sarcasm = request.form.get('sarcasm')
+            offence = request.form.get('offence')
+            motivation = request.form.get('motivation')
+            sentiment = request.form.get('sentiment')
 
+            query = f'SELECT * FROM public."MemeTable" WHERE humour = \'{humour}\' \
+            AND sarcasm = \'{sarcasm}\' \
+            AND offensive = \'{offence}\' \
+            AND motivational = \'{motivation}\' \
+            AND sentiment = \'{sentiment}\''
+
+            cur.execute(query)
+
+            meme_data = cur.fetchall()
+
+            if meme_data == None:
+                meme_data = 'No files found'
+
+        except(Exception, psycopg2.Error) as error:
+            print(error)
+
+        finally:
+            if conn is not None:
+                cur.close()
+                conn.close()
+
+        return render_template('meme_explorer.html', data=meme_data)
+    
     return render_template('meme_explorer.html')
 

@@ -156,10 +156,9 @@ def get_image_dimensions(file):
     image_format = imghdr.what(None, h=image_data)
 
     if image_format == 'jpeg' or image_format == 'jpg':
-        width, height = struct.unpack('>HH', image_data[162:166])
+        return struct.unpack('>HH', image_data[162:166])
     elif image_format == 'png':
-        width, height = struct.unpack('>LL', image_data[16:24])
-    return width, height
+        return struct.unpack('>LL', image_data[16:24])
 
 
 def generate_id():

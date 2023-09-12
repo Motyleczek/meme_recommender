@@ -7,8 +7,6 @@ import os
 
 def post(file, title):
 
-    print("*******Directory:**********", os.getcwd())
-
     # credentials = r'client_secrets.json'
     
     # with open('meme_recommender\reddit_api_functions\client_secrets.json', 'r') as f:

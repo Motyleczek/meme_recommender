@@ -17,7 +17,7 @@ def index():
     data = None
     try:
         params = config()
-        n = random.randint(1, 3000)
+        n = random.randint(1, 3226)
         conn = psycopg2.connect(**params)
 
         cur = conn.cursor()
@@ -25,7 +25,6 @@ def index():
         cur.execute('SELECT * FROM public."MemeTable" WHERE key = %s', (n,))
 
         data = cur.fetchall()
-        print(data)
 
     except(Exception, psycopg2.Error) as error:
         print(error)

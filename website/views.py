@@ -24,7 +24,6 @@ def index():
         cur.execute('''SELECT * FROM public."MemeTable" ORDER BY key ASC''')
 
         data = cur.fetchall()
-        print(data)
 
     except(Exception, psycopg2.Error) as error:
         print(error)

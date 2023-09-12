@@ -62,8 +62,11 @@ class Website(metaclass=SingletonMeta):
 
         with self.app.app_context():
             self.db.create_all()
-            self.set_initial_values()
-            print('Database schema has been synchronized')
+            if self.MemeTable.query.count() == 0:
+                self.set_initial_values()
+                print('Database schema has been synchronized')
+            else:
+                print('MemeTable already exists in the database, skipping initialization.')
 
     def set_initial_values(self):
         with open("meme_recommender/dataset/db.csv", encoding='utf8') as file:

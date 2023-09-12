@@ -62,6 +62,7 @@ class Website(metaclass=SingletonMeta):
 
         with self.app.app_context():
             self.db.create_all()
+            
             if self.MemeTable.query.count() == 0:
                 self.set_initial_values()
                 print('Database schema has been synchronized')

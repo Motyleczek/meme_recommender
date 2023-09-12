@@ -11,30 +11,31 @@ app = Flask(__name__)
 
 ALLOWED_EXTENSIONS = {'jpg', 'png'}
 
-@app.route('/', methods = ["GET", "POST"])
+@app.route('/')
 def index():
-    conn = None
-    data = None
-    try:
-        params = config()
-        n = random.randint(1, 3226)
-        conn = psycopg2.connect(**params)
+    # conn = None
+    # data = None
+    # try:
+    #     params = config()
+    #     n = random.randint(1, 3000)
+    #     conn = psycopg2.connect(**params)
 
-        cur = conn.cursor()
+    #     cur = conn.cursor()
 
-        cur.execute('SELECT * FROM public."MemeTable" WHERE key = %s', (n,))
+    #     cur.execute('SELECT * FROM public."MemeTable" WHERE key = %s', (n,))
 
-        data = cur.fetchall()
+    #     data = cur.fetchall()
+    #     print(data)
 
-    except(Exception, psycopg2.Error) as error:
-        print(error)
+    # except(Exception, psycopg2.Error) as error:
+    #     print(error)
 
-    finally:
-        if conn is not None:
-            cur.close()
-            conn.close()
+    # finally:
+    #     if conn is not None:
+    #         cur.close()
+            # conn.close()
 
-    return render_template('index.html', data=data)
+    return render_template('index.html')
 
 @app.route('/MemeAnalyzer', methods=['GET', 'POST'])
 def meme_analyzer():

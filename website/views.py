@@ -123,8 +123,7 @@ def meme_explorer():
 
 
 def save_meme_in_database(file, title, author, post_url, img_path):
-    image_data = file.read()
-    image_width, image_height = get_image_dimensions(image_data)
+    image_width, image_height = get_image_dimensions(file)
     time = datetime.datetime.now(pytz.UTC)
     generated_id = generate_id()
     ups = random.randint(0,10000)
@@ -151,9 +150,9 @@ def save_meme_in_database(file, title, author, post_url, img_path):
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
-def get_image_dimensions(image_data):
-    image = Image.open(io.BytesIO(image_data))
-    width, height = image.size
+def get_image_dimensions(file):
+    img = Image.open(io.BytesIO(file.stream.read()))
+    width, height = img.size
     return width, height
 
 def generate_id():

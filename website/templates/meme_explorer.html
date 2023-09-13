@@ -5,15 +5,6 @@
 {% endblock %}
 
 {% block content %}
-<div class="content", style="text-align:center">
-  <h1>Curently under construction</h1>
-  
-  
-  <br>
-  <img src="./static/BobBuilder.jpeg"
-     width="600" 
-     height="300"><br>
-  </p>
 
   <h1>Meme Filter</h1>
   <form method="POST" action="/MemeExplorer">
@@ -59,10 +50,10 @@
       <input type="submit" value="Apply Filter">
   </form>
 
-  {% for d in data %}
-  <h2>Title: {{d[0][1]}}</h2>
-  <a href="{{d[0][2]}}" target="_blank">
-    <img src="{{d[0][2]}}" alt="{{d[0][1]}}" height="400">
+  <!-- {% for d in data %} -->
+  <h2>Title: {{d[1]}}</h2>
+  <a href="{{d[2]}}" target="_blank">
+    <img src="{{d[2]}}" alt="{{d[1]}}" height="400">
   </a>
   {% endfor %}
   

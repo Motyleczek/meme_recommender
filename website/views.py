@@ -70,7 +70,7 @@ def meme_analyzer():
             with open("meme_recommender/website/static/wynik.txt", "wt") as file:
                 file.write(str(prediction))
 
-            save_meme_in_database(file, title, author, post_url, img_path)
+            save_meme_in_database(file, title, author, post_url, img_path, prediction)
 
     return render_template('meme_analyzer.html')
 
@@ -119,7 +119,7 @@ def meme_explorer():
     return render_template('meme_explorer.html')
 
 
-def save_meme_in_database(file, title, author, post_url, img_path):
+def save_meme_in_database(file, title, author, post_url, img_path, prediction):
     image_width = 100
     image_height = 100
     time = datetime.datetime.now(pytz.UTC).strftime("%m%d%H%M%S")
@@ -132,8 +132,8 @@ def save_meme_in_database(file, title, author, post_url, img_path):
         cur = conn.cursor()
 
         cur.execute(
-            'INSERT INTO public."MemeTable" (title, thumbnail, height, width, time, author, id, ups, downs, media) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)',
-            (title, img_path, image_height, image_width, time, author, generated_id, ups, downs, post_url)
+            'INSERT INTO public."MemeTable" (title, thumbnail, height, width, time, author, id, ups, downs, media, sentiment, humour, sarcasm, offensive, motivational) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)',
+            (title, img_path, image_height, image_width, time, author, generated_id, ups, downs, post_url, prediction['sentiment'], prediction['humour'], prediction['sarcasm'], prediction['offensive'], prediction['motivational'])
         )
 
         conn.commit()

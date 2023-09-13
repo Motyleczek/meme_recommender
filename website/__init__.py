@@ -44,6 +44,11 @@ def createMemeTable(db):
         ups = db.Column(db.Integer)
         downs = db.Column(db.Integer)
         media = db.Column(db.String)
+        sentiment = db.Column(db.String)
+        humour = db.Column(db.String)
+        sarcasm = db.Column(db.String)
+        offensive = db.Column(db.String)
+        motivational = db.Column(db.String)
 
     return MemeTable
 
@@ -75,7 +80,7 @@ class Website(metaclass=SingletonMeta):
             next(data)
 
             for row in data:
-                key, title, thumbnail, height, width, time, author, meme_id, ups, downs, media = row
+                key, title, thumbnail, height, width, time, author, meme_id, ups, downs, media, sentiment, humour, sarcasm, offensive, motivational = row
                 new_meme = self.MemeTable(
                     # key=key,
                     title=title,
@@ -87,7 +92,12 @@ class Website(metaclass=SingletonMeta):
                     id=meme_id,
                     ups=ups,
                     downs=downs,
-                    media=media        
+                    media=media,
+                    sentiment = sentiment,
+                    humour = humour,
+                    sarcasm = sarcasm,
+                    offensive = offensive,
+                    motivational = motivational 
                 )
                 self.db.session.add(new_meme)
             self.db.session.commit()

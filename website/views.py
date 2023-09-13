@@ -12,19 +12,22 @@ views = Blueprint('views', __name__)
 
 @views.route('/', methods=["GET", "POST"])
 def index():
+    # website = Website()
+    # if request.method == "POST":
     conn = None
     data = None
     try:
         params = config()
-        n = random.randint(1, 3000)
+        n = random.randint(1, 3226)
         conn = psycopg2.connect(**params)
+
+        print('Connected succesfully')
 
         cur = conn.cursor()
 
-        cur.execute('''SELECT * FROM public."MemeTable" ORDER BY key ASC''')
+        cur.execute('SELECT * FROM public."MemeTable" WHERE key = %s', (n,))
 
         data = cur.fetchall()
-        print(data)
 
     except(Exception, psycopg2.Error) as error:
         print(error)
@@ -35,6 +38,8 @@ def index():
             conn.close()
 
     return render_template('index.html', data=data)
+    # else:
+    #     return render_template('index.html')
 
 @views.route('/MemeAnalyzer', methods=['GET', 'POST'])
 def meme_analyzer():
@@ -52,5 +57,20 @@ def meme_analyzer():
 
 @views.route('/MemeExplorer')
 def meme_explorer():
+
+    # humour = request.form.get('humour')
+    # sarcasm = request.form.get('sarcasm')
+    # offence = request.form.get('offence')
+    # motivation = request.form.get('motivation')
+
+    # query = f'SELECT * FROM memes WHERE humour >= {humour} \
+    # AND sarcasm >= {sarcasm} \
+    # AND offence >= {offence} \
+    # AND motivation >= {motivation}'
+
+    # cursor.execute(query)
+
+    # meme_data = cursor.fetchone()
+
     return render_template('meme_explorer.html')
 

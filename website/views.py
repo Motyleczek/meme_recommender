@@ -1,6 +1,3 @@
-import imghdr
-import struct
-
 from flask import Blueprint, render_template, request, flash, jsonify
 from .config import config
 from ..reddit_api_functions import *
@@ -67,11 +64,11 @@ def meme_analyzer():
 
             post_url = post(img_path, request.form["title"])
 
-            # model_A = keras.models.load_model("meme_recommender/model_A.keras")
-            # model_C = keras.models.load_model("meme_recommender/model_C.keras")
-            # prediction = meme_prediction(model_A, model_C, img_path)
-            # with open("meme_recommender/website/static/wynik.txt", "wt") as file:
-            #     file.write(str(prediction))
+            model_A = keras.models.load_model("meme_recommender/model_A.keras")
+            model_C = keras.models.load_model("meme_recommender/model_C.keras")
+            prediction = meme_prediction(model_A, model_C, img_path)
+            with open("meme_recommender/website/static/wynik.txt", "wt") as file:
+                file.write(str(prediction))
 
             save_meme_in_database(file, title, author, post_url, img_path)
 
@@ -82,7 +79,6 @@ def meme_explorer():
 
     if request.method == "POST": 
         conn = None
-        data = None
         try:
             params = config()
             conn = psycopg2.connect(**params)
@@ -108,10 +104,10 @@ def meme_explorer():
             meme_data = cur.fetchall()
 
             if meme_data == None:
-                meme_data = 'No files found'
+                meme_data = f'No files found'
 
         except(Exception, psycopg2.Error) as error:
-            print(error)
+            flash(f'Error occurred: {error}', 'error')
 
         finally:
             if conn is not None:
@@ -154,5 +150,5 @@ def allowed_file(filename):
 
 def generate_id():
     characters = string.ascii_letters + string.digits
-    random_id = ''.join(random.choice(characters) for _ in range(6))
-    return random_id
+    generated_id = ''.join(random.choice(characters) for _ in range(6))
+    return generated_id
